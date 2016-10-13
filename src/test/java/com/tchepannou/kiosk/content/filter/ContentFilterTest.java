@@ -14,6 +14,7 @@ public class ContentFilterTest {
         testFilter("default");
     }
 
+
     @Test
     public void shouldFilterMboaFootball() throws Exception {
         testFilter("mboafootball");
