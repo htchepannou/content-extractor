@@ -10,9 +10,6 @@ after_success:
   - wget http://roboconf.net/resources/build/settings.xml
   - mvn clean deploy -q --settings settings.xml
 
-after_success:
-  - ./after_success.sh
-
 notifications:
   email:
   - herve.tchepannou@gmail.com
