@@ -1,43 +1,38 @@
 package com.tchepannou.kiosk.content;
 
-import org.apache.commons.io.IOUtils;
-import org.jsoup.Jsoup;
+import com.tchepannou.kiosk.content.filter.FilterSet;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.when;
 
+@RunWith(MockitoJUnitRunner.class)
 public class ContentExtractorTest {
     ContentExtractor extractor = new ContentExtractor();
 
+    @Mock
+    FilterSet filterSet;
+
+    @Mock
+    FilterSetProvider provider;
+
+    @Mock
+    ExtractorContext context;
+
     @Test
-    public void testCameroonInfoNet() throws Exception {
-        test("cameroon-info.net");
-    }
+    public void shouldExtractText(){
 
+        when(filterSet.filter(any())).thenReturn("hello");
+        when(provider.get()).thenReturn(filterSet);
 
-    private void test(final String key) throws Exception{
-        final String html = IOUtils.toString(getClass().getResourceAsStream("/extractor/" + key + ".html"));
-        final ExtractorContext ctx = createContext();
+        when(context.getFilterSetProvider()).thenReturn(provider);
 
-        final String xhtml = extractor.extract(html, ctx);
+        final String xhtml = extractor.extract("foo", context);
 
-        final String expected = IOUtils.toString(getClass().getResourceAsStream("/extractor/" + key + "-content.html"));
-        assertHtmlMatches(expected, xhtml);
-    }
-
-    private void assertHtmlMatches(final String expected, final String value){
-        final String expectedText = Jsoup.parse(expected).text();
-        final String valueText = Jsoup.parse(value).text();
-
-        assertThat(expectedText.trim()).isEqualTo(valueText);
-    }
-
-    private ExtractorContext createContext() {
-        return new ExtractorContext() {
-            @Override
-            public int getMinTextLength() {
-                return 100;
-            }
-        };
+        assertThat(xhtml).isEqualTo("hello");
     }
 }
