@@ -4,6 +4,8 @@ import org.apache.commons.io.IOUtils;
 import org.jsoup.Jsoup;
 import org.junit.Test;
 
+import java.util.regex.Pattern;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ContentExtractorIT {
@@ -37,6 +39,11 @@ public class ContentExtractorIT {
             @Override
             public FilterSetProvider getFilterSetProvider() {
                 return new DefaultFilterSetProvider(100);
+            }
+
+            @Override
+            public Pattern getTitlePattern() {
+                return null;
             }
         };
     }
